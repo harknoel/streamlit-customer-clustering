@@ -9,6 +9,15 @@ with open(filename, 'rb') as infile:
 
 st.title('RFM Customer Segmentation')
 
+string = """
+```
+Customers in Cluster 1 are classified as best customers.
+Customers in Cluster 2 are classified as worst customers.
+```
+"""
+
+st.markdown(string, unsafe_allow_html=True)
+
 # Get user input for RFM values
 recency = st.number_input('Recency (Days since last purchase)', min_value=0)
 frequency = st.number_input('Frequency (Number of purchases)', min_value=0)
@@ -22,13 +31,30 @@ if st.button('Predict Cluster'):
     prediction = loaded_model.predict(user_data)
     cluster = prediction[0]
 
-    # Display prediction result
     st.write(f"Predicted Cluster: {cluster}")
 
-    # Optionally, display cluster descriptions based on the model
+    # Display cluster descriptions based on the model
+    cluster_0 = """
+    1. They are less frequent
+    2. They make purchases of small amounts
+    3. They have made more recent purchases
+    """
+
+    cluster_1 = """
+    1. They frequently make purchases
+    2. They make purchases of large amounts
+    3. They have made purchases more recently than customers in Cluster 0
+    """
+
+    cluster_2 = """
+    1. They are less frequent
+    2. They make purchases of small amounts
+    3. They have not made a purchase in a long time.
+    """
+
     if cluster == 0:
-        st.write("Description for Cluster 0 (e.g., Loyal High Spenders)")
+        st.write(cluster_0)
     elif cluster == 1:
-        st.write("Description for Cluster 1 (e.g., Recent Customers)")
-    else:
-        st.write("Description for Cluster 2 (e.g., Low Engagement Customers)")
+        st.write(cluster_1)
+    elif cluster == 2:
+        st.write(cluster_2)
